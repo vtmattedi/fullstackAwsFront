@@ -1,0 +1,104 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Homenaje&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sixtyfour+Convergence&display=swap');
+
+.error-text
+{
+    color: red;
+    font-size: 0.75em;
+    position: relative;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+
+
+.input-div
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 15em;
+    border: #45a049 solid 1px;
+}
+
+.middle-div
+{
+    margin: 1%;
+    align-items: center;
+    width:100%;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    border: #45a049 solid 1px;
+}
+.outter-input-div form
+{
+    align-items: center;
+    width: 80%;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    font-size: 1.5em;
+    
+}
+
+.outter-input-div
+{
+    width: 100%;
+    min-width: 50vw;
+    min-height: 500px;
+    height: 50vh;
+    align-items: center;
+    display: flex;
+    flex-direction: column  ;
+    justify-content: center;
+    border: #f1f1f1 solid 1px;
+    box-shadow: 0px 0px 10px 5px #ccc;
+    overflow-y: hidden;
+    
+}
+.outter-input-div .logo
+{
+    position: relative;
+    top: -5%;
+    width: 10em;
+    height: 10em;
+    border: #f1f1f1 1px solid;
+}
+
+.go-button
+{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+   
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 3%;
+    font-size: 1em;
+    font-family: "Inter", sans-serif;
+}
+
+.go-button:hover
+{
+    text-decoration: underline;
+    background-color: #45a049;
+    color: #f1f1f1;
+   
+
+}
+input
+{
+    text-align: center;
+    font-size: 0.7em;
+    font-family: 'Inter', sans-serif;
+}
+
+label
+{
+    border: #45a049 solid 1px;
+}

@@ -1,0 +1,36 @@
+.menu-div
+{
+    background-color: #282c34;
+    color: #ddd;
+    border: #45a049 solid 1px;
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    box-shadow: 0px 0px 10px 5px #ccc;
+}
+
+
+.nav-link.active
+{
+    color: #282c34 !important;
+
+}
+.nav-link
+{
+    color: orange !important;
+    font-size: 1.5em;
+}
+
+body{
+    background-image: linear-gradient(to top,#282c34 0,#155ceb 100%) !important; /* override background image gradient w/ flat color */
+}
+
+.topdiv
+{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
