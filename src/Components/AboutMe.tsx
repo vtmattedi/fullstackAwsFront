@@ -11,14 +11,14 @@ const AboutMe: React.FC = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '10px',
-                    maxWidth: '80vw',
+                    maxWidth: '500px',
                     color: 'white',
                 }
             }> 
                 <div>
                     <p style={
                         {
-                            fontSize: '1.5rem',
+                            fontSize: '1.4rem',
                             textAlign: 'justify',
                             padding: '10px',
                         }
@@ -29,8 +29,14 @@ const AboutMe: React.FC = () => {
                         The backend is built with Node.js and Express.
                         It also implements JWT authentication with refreshtokens.
                         Take a look at the code on <a href="https://github.com/vtmattedi/fullstackAws">github</a>.
-                        The project is still being developed.<br />
+                        The project is still being developed.
+                        <br />
+                        <div style={{textAlign: 'center'}}>
                         <a href="https://github.com/vtmattedi/">Github</a> || <a href="https://www.linkedin.com/in/vitor-mattedi-dev">Linkedin</a>
+                        </div>
+                        You dont need to use a real email, just type any Email and it will work.
+                        Part of the demonstration is to have the email be visible to other users.
+                        Do not use sensitive information.
 
                     </p>
                 </div>
