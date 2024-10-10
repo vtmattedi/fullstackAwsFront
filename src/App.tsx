@@ -12,6 +12,7 @@ import Nav from 'react-bootstrap/Nav';
 import { useAxios, useAxiosJwt, useRefreshToken } from './AxiosIntercept/useAxios';
 import { ErrorProps } from './Components/Interfaces/ErrorMessage';
 import Dashboard from './Components/Dashboard';
+import AboutMe from './Components/AboutMe';
 
 function App() {
   const [menu, setMenu] = React.useState('login');
@@ -48,8 +49,13 @@ function App() {
             <Nav.Item >
               <Nav.Link active={menu === 'signup'} onClick={() => setMenu('signup')}>Sign Up</Nav.Link>
             </Nav.Item>
+            <Nav.Item >
+              <Nav.Link active={menu === 'about'} onClick={() => setMenu('about')}>About Project</Nav.Link>
+            </Nav.Item>
           </Nav>
-          {menu === 'login' ? <LoginForm handleLoading={showLoading} /> : <SignupForm handleLoading={showLoading} />}
+          {menu === 'login' && <LoginForm handleLoading={showLoading} />}
+          {menu === 'signup' && <SignupForm handleLoading={showLoading} />}
+          {menu === 'about' && <AboutMe  />}
           <div>
 
 
