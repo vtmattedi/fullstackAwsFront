@@ -1,0 +1,67 @@
+.img-title-div
+{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-around;
+    min-width: 375px;
+}
+
+.outer-div
+{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-photo
+{
+    border: 1px solid black;
+    height: 5em;
+    width: 5em;
+    border-radius: 50%;
+}
+
+.username
+{
+    border: 1px solid black;
+    width: 20vw;
+    font-size: 1.5em;
+    margin-left:5px;
+}
+
+.username-input
+{
+    background-color: transparent;
+    border: none;
+    color: white;
+    max-width: 100%;
+    text-align: left;
+}
+
+.username-input::selection
+{
+    background-color: white;
+    color: black;
+}
+
+
+.edit-button
+{
+    position: relative;
+    top: -50%;
+    right: 0px;
+    width: 100px;
+    height: 30px;
+    z-index: 0;
+}
+
+.email
+{
+
+    margin: 10px;
+    border: 1px solid black;
+}
+

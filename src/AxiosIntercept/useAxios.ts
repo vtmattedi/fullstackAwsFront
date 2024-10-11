@@ -6,7 +6,7 @@ const useRefreshToken = () => {
     const { handleToken, handleLogout } = useAuth();
 
     const RefreshToken = async () => {
-
+        console.log("Refresh Token")
         let token = undefined;
         await axiosCredsInstance.post('/token').then((response) => {
             console.log("token Aquired:", response.data);

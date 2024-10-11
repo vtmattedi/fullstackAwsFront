@@ -22,12 +22,11 @@ function App() {
   const getToken = useRefreshToken();
   const [firstLoad, setFirstLoad] = React.useState(true);
 
-  useEffect( () => {
+  useEffect(() => {
     if (firstLoad) {
       setFirstLoad(false);
-       getToken().finally(() => {
-        setTimeout(() => setLoading(false), 1000);
-        });
+      getToken();
+      setLoading(false);
     }
   }, []);
 
@@ -55,7 +54,7 @@ function App() {
           </Nav>
           {menu === 'login' && <LoginForm handleLoading={showLoading} />}
           {menu === 'signup' && <SignupForm handleLoading={showLoading} />}
-          {menu === 'about' && <AboutMe  />}
+          {menu === 'about' && <AboutMe />}
           <div>
 
 
