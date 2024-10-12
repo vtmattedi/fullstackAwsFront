@@ -21,7 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps > = ({ children }) => {
     const [userId, setUserId] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const handleToken = (token: string) => {
-        console.log("new access token:", token);
+        console.log("new access token");
         setToken(token);
         setIsAuthenticated(true);
     }

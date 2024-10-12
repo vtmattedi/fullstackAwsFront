@@ -23,7 +23,7 @@ const AboutMe: React.FC = () => {
                             padding: '10px',
                         }
                     }>
-                        This is project demonstrate a fullstack application.
+                        This project demonstrates a fullstack application.
                         It integrates AWS MySQL databases on a MVC pattern.
                         The front end is built with React and Bootstrap.
                         The backend is built with Node.js and Express.
@@ -36,7 +36,8 @@ const AboutMe: React.FC = () => {
                         </div>
                         You dont need to use a real email, just type any Email and it will work.
                         Part of the demonstration is to have the email be visible to other users.
-                        Do not use sensitive information.
+                        Do not use sensitive information. (Demo:
+                        login: test123@test.com, password: test1234)
 
                     </p>
                 </div>

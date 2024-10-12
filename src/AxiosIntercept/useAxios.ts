@@ -1,5 +1,5 @@
 import { axiosInstanceJwt, axiosCredsInstance } from './axios';
-import { useAuth } from '../Context/Authcontext';
+import { useAuth } from '../Context/AuthContext';
 import { useEffect } from 'react';
 
 const useRefreshToken = () => {
@@ -9,7 +9,6 @@ const useRefreshToken = () => {
         console.log("Refresh Token")
         let token = undefined;
         await axiosCredsInstance.post('/token').then((response) => {
-            console.log("token Aquired:", response.data);
             handleToken(response.data.accessToken);
             token = response.data.accessToken;
         }).catch((error) => {
@@ -28,7 +27,6 @@ const useAxiosJwt = () => {
     // Request interceptor to add the JWT token to the headers
     const RefreshToken = useRefreshToken();
     useEffect(() => {
-        console.log("Setting up axios interceptors", Date.now() % 10000);
         const requestId = axiosInstanceJwt.interceptors.request.use(
             (config: any) => {
                 if (token) {
@@ -55,7 +53,6 @@ const useAxiosJwt = () => {
                     prevReq._retry = true;
                     console.log("Refreshing token...", Date.now() % 10000);
                     const newToken = await RefreshToken();
-                    console.log("New token:", newToken, Date.now() % 10000);
                     if (newToken) {
                         prevReq.headers.Authorization = `Bearer ${newToken}`;
                         console.log("Retrying request...", Date.now() % 10000);

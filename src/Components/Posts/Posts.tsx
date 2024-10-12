@@ -1,21 +1,20 @@
 import React from 'react';
 import "./Posts.css";
+import PostInfo from '../../Types/PostInfo';
 
 interface PostProps {
     title: string;
     text: string;
     onDelete: () => void;
+    onClick?: () => void;
 }
 
-const Post: React.FC<PostProps> = ({ title, text, onDelete }) => {
+const Post: React.FC<PostProps> = ({ title, text, onDelete, onClick }) => {
     return (
-        <div className='posts-outer-div'>
-            <div className='posts-title-button-div'>
-                <h2 className='posts-title'>{title}</h2>
-                <button className='posts-button' onClick={onDelete}>Delete</button>
-            </div>
-            <p className='posts-text'>{text.repeat(20)}</p>
-        </div>
+        <div >
+       <div>{title}</div>
+       <div>{text}</div>
+       </div>
     );
 };
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ErrorProps } from './Interfaces/ErrorMessage';
 import { useAxios } from '../AxiosIntercept/useAxios';
-import { useAuth } from '../Context/Authcontext';
+import { useAuth } from '../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface SignupFormProps {
     handleLoading: (loading: boolean, statement?: string) => void;
@@ -17,7 +18,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
     const axios = useAxios();
     const [errors, setErrors] = React.useState<Array<ErrorProps>>([]);
     const { handleToken } = useAuth();
-
+    const navigator = useNavigate();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         handleLoading(true, "creating user");
@@ -50,6 +51,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
                 handleToken(response.data.accessToken);
                 console.log("token:", response.data.accessToken);
             }
+            navigator("./dashboard");
             handleLoading(false);
         }).catch((error) => {
             console.log(error);

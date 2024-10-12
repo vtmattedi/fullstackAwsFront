@@ -3,7 +3,8 @@ import './forms.css';
 import { ErrorProps } from './Interfaces/ErrorMessage';
 import Logo from '../logo2.svg';
 import { useAxios } from '../AxiosIntercept/useAxios';
-import { useAuth } from '../Context/Authcontext';
+import { useAuth } from '../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 interface LoginFormProps {
     handleLoading: (loading: boolean, statement?: string) => void;
 }
@@ -16,6 +17,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
     const [width, setWidth] = React.useState(window.innerWidth);
     const [errors, setErrors] = React.useState<Array<ErrorProps>>([]);
     const { handleToken } = useAuth();
+    const navigator = useNavigate();
 
     const axios = useAxios();
 
@@ -45,7 +47,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
             if (response?.data?.accessToken) {
                 handleToken(response.data.accessToken);
             }
-            console.log(response.data);
+            navigator('/dashboard');
             handleLoading(false);
         }).catch((error) => {
             if (!error.response?.data) {
@@ -71,7 +73,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
         <div className="outter-input-div">
             <img src={Logo} alt='logo' className='logo'></img>
             <form onSubmit={handleSubmit}>
-            {errors?.filter((error) => error.target === 'body').map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
+            {errors?.filter((error) => error.target === 'body' || error.target === `creds`).map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
 
                 <div className='middle-div'>
                     <div className="input-div" style={

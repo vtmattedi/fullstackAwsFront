@@ -1,0 +1,40 @@
+.new-post-title {
+    font-size: 1em;
+    padding: 3px;
+}
+
+.new-post-input {
+    font-size: 1em;
+    font-family: 'Inter', sans-serif;
+    height: 50vh;
+    text-indent: 10px;
+}
+.new-post-input, .new-post-title{
+    border-radius: 10px;
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.new-post-input.custom-dark-mode, .new-post-title.custom-dark-mode{
+    color: white;
+    box-shadow: 2px 2px 2px 2px rgba(255, 255, 255, 0.2);
+    border: 1px solid snow;
+    background-color: rgb(57, 56, 56);
+}
+
+.new-post-info.custom-dark-mode
+{
+   
+    color: white;
+}
+
+.post-modal-created-at
+{
+    font-size: 0.8em;
+    font-family: 'Inter', sans-serif;
+    color: gray;
+    position: absolute;
+    right:5%;
+    top: 3%;
+}

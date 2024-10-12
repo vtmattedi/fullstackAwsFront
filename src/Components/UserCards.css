@@ -1,0 +1,24 @@
+.card-users {
+    padding: 5px;
+    margin: 5px;
+}
+
+
+.card-users-title {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+
+}
+
+.card-users-title {
+    font-weight: bold;
+    margin-left: 10px;
+    text-transform: capitalize;
+}
+
+.card-users-title-time {
+    font-size: 0.75em;
+    color: grey;
+}

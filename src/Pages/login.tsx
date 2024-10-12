@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from './logo.svg';
-import './App.css';
-import SignupForm from './Components/SignupForm';
-import LoginForm from './Components/LoginForm';
-import Loading from './Components/Loading';
-import './common.css';
-import { AuthProvider, useAuth } from './Context/AuthContext';
+
+import '../App.css';
+import SignupForm from '../Components/SignupForm';
+import LoginForm from '../Components/LoginForm';
+import Loading from '../Components/Loading';
+import '../common.css';
+import { useAuth } from '../Context/AuthContext';
 import Nav from 'react-bootstrap/Nav';
-import { useAxios, useAxiosJwt, useRefreshToken } from './AxiosIntercept/useAxios';
-import { ErrorProps } from './Components/Interfaces/ErrorMessage';
-import AboutMe from './Components/AboutMe';
+import { useAxios, useAxiosJwt, useRefreshToken } from '../AxiosIntercept/useAxios';
+import AboutMe from '../Components/AboutMe';
+import {  useNavigate } from 'react-router-dom';
 
 function App() {
   const [menu, setMenu] = React.useState('login');
@@ -20,12 +20,19 @@ function App() {
   const [loadingStatement, setLoadingStatement] = React.useState('Loading');
   const getToken = useRefreshToken();
   const [firstLoad, setFirstLoad] = React.useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (firstLoad) {
       setFirstLoad(false);
-      getToken();
-      setLoading(false);
+      getToken().then(
+        (response) => {
+          if (response) {
+            navigate('/dashboard', { replace: true });
+          }
+        }
+      ).finally(() => {
+        setLoading(false)});
     }
   }, []);
 
@@ -37,7 +44,7 @@ function App() {
   }
 
   return (
-    <div className='topdiv' style={{ color: 'white' }}>
+    <div>
       {!isAuthenticated &&
         <div>
           <Nav variant="underline" defaultActiveKey={menu}>
@@ -60,8 +67,7 @@ function App() {
           </div>
         </div>}
 
-      {loading ? <Loading text={loadingStatement} /> : <></>}
-  
+      {loading ?? <Loading text={loadingStatement} />}
     </div>
   );
 }

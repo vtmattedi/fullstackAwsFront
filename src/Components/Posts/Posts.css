@@ -9,6 +9,12 @@
     max-width: 60vw;
     min-width: 375px;
 }
+.posts-outer-div:hover
+{
+    background-color: #3c3b3b;
+    transition: 0.5s;
+    cursor: pointer;
+}
 .posts-title
 {
     font-size: 1.5em;
