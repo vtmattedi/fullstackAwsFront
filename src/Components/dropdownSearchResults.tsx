@@ -13,7 +13,7 @@ const DropdownSearchResults: React.FC = () => {
     const [searchHandler, setSearchHandler] = React.useState<ReturnType<typeof setTimeout>>();
     const [searchUser, setSearchUser] = React.useState<string>("");
     const axios = useAxiosJwt();
-    const [width, setWidth] = React.useState<number>(0);
+    const [width, setWidth] = React.useState<number>(window.innerWidth);
 
     const searchForUser = (username: string) => {
         axios.get(`/finduser/${username}`).then((response) => {
@@ -85,6 +85,7 @@ const DropdownSearchResults: React.FC = () => {
                         maxHeight: '60vh',
                         overflowY: 'scroll',
                         overflowX: 'hidden',
+                        scrollbarWidth: 'none',
                         backgroundColor: theme === "dark" ? '#000': '#bbb',
                         borderRadius: '5px',
                         margin: 'auto',
