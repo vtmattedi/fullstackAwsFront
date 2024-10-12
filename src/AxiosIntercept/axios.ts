@@ -1,5 +1,5 @@
 import axios from "axios";
-const BaseUrl = window.location.origin;//.replace(":3000",":4500");
+const BaseUrl =  process.env.NODE_ENV === "development"?window.location.origin.replace(":3000",":4500"):window.location.origin;
 
 const axiosInstanceJwt = axios.create({
     baseURL: BaseUrl + `/api/`,

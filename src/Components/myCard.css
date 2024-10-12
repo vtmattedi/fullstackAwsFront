@@ -34,11 +34,14 @@
 }
 .username
 {
-    width: 100%;
+    max-width:45vw;
     font-size: 1.5em;
     margin-left:5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
     
 }
+
 
 .username-input
 {

@@ -4,8 +4,8 @@ type Theme = 'light' | 'dark';
 
 interface ThemeContextProps {
     theme: Theme;
-    toggleTheme: (uid: string) => void;
-    LoadTheme: (uid: string) => void;
+    toggleTheme: () => void;
+    LoadTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);

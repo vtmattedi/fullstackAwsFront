@@ -19,7 +19,7 @@ const Post: React.FC<PostProps> = ({ post, onDelete, onClick }) => {
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <Card className="w-50 border" onClick={onClick} data-bs-theme={theme} >
+            <Card className="w-75 border" onClick={onClick} data-bs-theme={theme} style={{maxWidth:'800px'}}>
                 <Card.Body>
                     <Card.Title>{post.title}</Card.Title>
                     <Card.Text>{post.content}</Card.Text>
