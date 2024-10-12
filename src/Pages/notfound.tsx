@@ -19,7 +19,7 @@ const NotFound = () => {
             }}/>
             <h1>404 - Not Found</h1>
             <h5 style={{padding:'10px'}}>These are not the driods you are looking for.</h5>
-            <Button variant="outline-warning" onClick={()=> { Navigate("/")}}>Continue the serach</Button>
+            <Button variant="outline-warning" onClick={()=> { Navigate("/")}}>Continue the search</Button>
         </div>
     );
 };

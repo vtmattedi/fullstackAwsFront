@@ -22,10 +22,12 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <NotFound />,
   },
   {
     path: "/dashboard",
     element: <Dashboard />,
+    errorElement: <NotFound />,
   }
 
   // Add more routes here as needed

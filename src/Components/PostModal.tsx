@@ -65,13 +65,13 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                     }}>
                     {edit ? "Edit" : "Post"}
                 </Button>
-                <Button variant="primary" onClick={() => { toggleTheme("1000") }}
+                {/* <Button variant="primary" onClick={() => { toggleTheme("1000") }}
                     style={{
                         fontWeight: 'bold',
                         minWidth: '100px'
                     }}>
                     toggleTheme
-                </Button>
+                </Button> */}
             </Modal.Footer>
         </Modal>
     );

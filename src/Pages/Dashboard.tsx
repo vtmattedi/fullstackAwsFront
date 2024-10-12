@@ -17,7 +17,7 @@ import { useTheme } from '../Context/MyThemeContext';
 
 const Dashboard: React.FC = () => {
     const axios = useAxiosJwt();
-    const {setUserId} = useAuth();
+    const { setUserId } = useAuth();
     const [data, setData] = React.useState<string>("");
     const [disableRefresh, setDisableRefresh] = React.useState(false);
     const [myInfo, setMyInfo] = React.useState<{ user: string, email: string, id: number } | undefined>(undefined);
@@ -28,7 +28,6 @@ const Dashboard: React.FC = () => {
     const [newPost, setNewPost] = React.useState<boolean>(false);
     const { isAuthenticated } = useAuth();
     const [editPost, setEditPost] = React.useState<{ show: boolean, post: PostInfo }>({ show: false, post: new PostInfo({ title: '', content: '', created_at: '', postid: 0, user_id: 0 }) });
-    const { theme, LoadTheme, toggleTheme } = useTheme();
     const navigator = useNavigate();
     const updateData = async () => {
         setDisableRefresh(true);
@@ -103,38 +102,64 @@ const Dashboard: React.FC = () => {
     }, []);
     return (
         <div className='outer-dashboard-div'>
-            <div>
+            <div >
                 <MyCard info={myInfo} setInfo={setMyInfo}></MyCard>
-                <div className={Themed("input-search-div")}>
-                    <input type='text' placeholder='Search an User' onChange={(e) => {
-                        setSearchUser(e.target.value);
+                <div onMouseLeave={
+                    () => {
                         if (searchHandler) {
                             clearTimeout(searchHandler);
                         }
-                        setSearchHandler(setTimeout(() => { searchForUser(e.target.value) }, 200));
-                    }} />
-                </div>
-                <Button variant='secondary'>
-                    Post
-                </Button>
-                <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }}>
-                    {
-                        searchResult.map((post, index) => {
-                            return <UserCard key={index} username={post.user} mail={post.email} created_at={post.created_at} onClick={() => { console.log(post.id) }} />
-                        })
+                        setSearchResult([]);
                     }
+                }
+                >
+                    <div className='d-flex flex-row align-content-center'>
+                        <div className='d-flex flex-column w-100'>
+                            <div className={Themed("input-search-div")}>
+                                <input type='text' placeholder='Search an User' onChange={(e) => {
+                                    setSearchUser(e.target.value);
+                                    if (searchHandler) {
+                                        clearTimeout(searchHandler);
+                                    }
+                                    setSearchHandler(setTimeout(() => { searchForUser(e.target.value) }, 200));
+                                }}
+                                    onMouseEnter={
+                                        () => {
+                                            console.log('mouse enter');
+                                            if (searchUser.length > 0) {
+                                                if (searchHandler) {
+                                                    clearTimeout(searchHandler);
+                                                }
+                                                setSearchHandler(setTimeout(() => { searchForUser(searchUser) }, 200));
+                                            }
+                                        }
+                                    }
+                                />
+                            </div>
+                        </div>
+                        <Button className={Themed("bt-post")} onClick={() => setNewPost(true)}>
+                            New Post
+                        </Button>
+                    </div>
+                    <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }}>
+                        {
+                            searchResult.map((post, index) => {
+                                return <UserCard key={index} username={post.user} mail={post.email} created_at={post.created_at} onClick={() => { console.log(post.id) }} />
+                            })
+                        }
+                    </div>
                 </div>
-
 
                 <div>
-                    <p>My Posts</p>
+                    <h1>My Posts</h1>
                 </div>
 
-                <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }}>
+                <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }} className='gap-1 d-flex flex-column align-content-center'>
                     {
                         myPosts.length === 0 ? <Skeleton count={1} /> :
                             myPosts.map((post, index) => {
-                                return <Post key={index} title={post.title || ""} text={post.content || ""}
+                                return <Post key={index}
+                                    post={post}
                                     onDelete={() => { handleDelete(post.postid || 0) }} onClick={() => { showPostByIndex(index) }}
                                 />
                             })
@@ -142,8 +167,6 @@ const Dashboard: React.FC = () => {
                 </div>
 
 
-                <button onClick={updateData} disabled={disableRefresh}>refresh data</button>
-                <button onClick={() => { setNewPost(true) }}>post</button>
                 <PostModal show={newPost} handleClose={() => { setNewPost(false) }} onPost={createPost} />
                 <PostModal show={editPost.show} handleClose={() => { setEditPost({ show: false, post: new PostInfo({}) }) }}
                     onPost={(title, content, postid) => {
