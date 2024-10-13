@@ -48,7 +48,7 @@ const DropdownSearchResults: React.FC = () => {
             }
         } >
             <div className={Themed("input-search-div")}>
-                <input type='text' placeholder='Search an User' onChange={(e) => {
+                <input type='text' placeholder='Search a User' onChange={(e) => {
                     setSearchUser(e.target.value);
                     if (searchHandler) {
                         clearTimeout(searchHandler);

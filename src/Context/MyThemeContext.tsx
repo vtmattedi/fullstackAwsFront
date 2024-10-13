@@ -16,9 +16,9 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
-        SaveTheme();
+        SaveTheme(newTheme);
     };
-    const SaveTheme = () => {
+    const SaveTheme = (newTheme:Theme) => {
         if (!userId)
             return;
         const uid = userId;
@@ -27,8 +27,11 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             localStorage.removeItem('theme');
             try {
                 let themeObj = JSON.parse(savedThemes);
+                console.log("old:", themeObj);
                 themeObj = themeObj.filter((t: { theme: Theme, userName: string }) => t.userName !== uid);
-                themeObj = [...themeObj, { theme: theme, userName: uid }];
+                themeObj = [...themeObj, { theme: newTheme, userName: uid }];
+                console.log("new:", themeObj, newTheme);
+
                 localStorage.setItem('theme', JSON.stringify(themeObj));
             }
             catch (e) {
@@ -51,6 +54,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             if (userTheme) {
                 setTheme(userTheme.theme);
             }
+            console.log(localThemes, userTheme, userId);
             return true;
         }
         catch (e) {
