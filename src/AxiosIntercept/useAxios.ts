@@ -1,9 +1,11 @@
 import { axiosInstanceJwt, axiosCredsInstance } from './axios';
 import { useAuth } from '../Context/AuthContext';
 import { useEffect } from 'react';
+import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
+import { useNavigate } from 'react-router-dom';
 
 const useRefreshToken = () => {
-    const { handleToken, handleLogout } = useAuth();
+    const { handleToken, handleLogout, setUserId } = useAuth();
 
     const RefreshToken = async () => {
         console.log("Refresh Token")
@@ -11,6 +13,9 @@ const useRefreshToken = () => {
         await axiosCredsInstance.post('/token').then((response) => {
             handleToken(response.data.accessToken);
             token = response.data.accessToken;
+            console.log("uid", response.data.uid);
+            setUserId(response.data.uid);
+
         }).catch((error) => {
             console.log(error);
             handleLogout();
@@ -24,6 +29,8 @@ const useRefreshToken = () => {
 // Custom hook to use axios with JWT token
 const useAxiosJwt = () => {
     const { token } = useAuth();
+    const globalCtx = useGlobalContext();
+    const navigation = useNavigate();
     // Request interceptor to add the JWT token to the headers
     const RefreshToken = useRefreshToken();
     useEffect(() => {
@@ -63,6 +70,20 @@ const useAxiosJwt = () => {
                     }
                 }
                 else {
+                    if (error.status === 401) {
+                        globalCtx.addAlert({
+                            title: "Session Expired",
+                            text: "Please log in again"
+                        })
+                        console.log("Logging out");
+                        navigation('/');
+                    }
+                    else if (error.status === 403) {
+                        globalCtx.addAlert({
+                            title: "Unauthorized",
+                            text: "You do not have permission to do that"
+                        })
+                    }
                     return Promise.reject(error);
                 }
 

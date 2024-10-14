@@ -5,7 +5,7 @@ import { useAxiosJwt, useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { Dropdown, DropdownButton, Button, Modal } from 'react-bootstrap';
 import { useTheme } from '../Context/MyThemeContext';
-import calc_time from '../Helpers/Time';
+import Themed from '../Helpers/Themes';
 import { useNavigate } from 'react-router-dom';
 import Menu from './menu';
 
@@ -89,7 +89,10 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
     }, [info?.user]);
 
     return (
-        <div className='outer-div'>
+        <div className='outer-div' style={{
+            backgroundColor: theme === "dark" ? "#333" : "#aaa",
+            color: theme === "dark" ? "white" : "black"
+        }}>
             <div className='top-mycard-div'>
                 <div
                     style={{
@@ -97,16 +100,17 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
                         justifyContent: 'space-between',
                         width: "100%",
 
+
                     }}
                 >
                     <div className='img-title-div'>
                         <img src={logo} className='profile-photo' alt='profile' />
                         <div className='username-div' >
-                            <div className='username' style={{ display: editMode ? 'none' : 'block' }}>
+                            <div className={'username'} style={{ display: editMode ? 'none' : 'block', color: theme === "dark" ? "white" : "black" }}>
                                 {captilize(info?.user)}
                             </div>
                             <input ref={inputRef} type='text' value={currentUser} onChange={(e) => setCurrentUser(e.target.value)}
-                                className='username username-input' style={{ display: editMode ? 'block' : 'none' }} />
+                                className={Themed('username username-input')} style={{ display: editMode ? 'block' : 'none' }} />
                         </div>
                     </div>
                     <div>

@@ -14,7 +14,8 @@ import Themed from '../Helpers/Themes';
 import './Dashboard.css';
 import { Button } from 'react-bootstrap';
 import { useTheme } from '../Context/MyThemeContext';
-import DropdownSearchResults from '../Components/dropdownSearchResults';
+import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
+import DropdownSearchResults from '../Components/DropdownSearchResults';
 
 const Dashboard: React.FC = () => {
     const axios = useAxiosJwt();
@@ -23,8 +24,10 @@ const Dashboard: React.FC = () => {
     const [myPosts, setPosts] = React.useState<PostInfo[]>([]);
     const [newPost, setNewPost] = React.useState<boolean>(false);
     const { isAuthenticated } = useAuth();
-    const [editPost, setEditPost] = React.useState<{ show: boolean, post: PostInfo }>({ show: false, post: new PostInfo({ title: '', content: '', created_at: '', postid: 0, user_id: 0 }) });
+    const [editPost, setEditPost] = React.useState<{ show: boolean, post: PostInfo }>({ show: false, post: new PostInfo({ title: '', content: '', created_at: '', id: 0, user_id: 0 }) });
     const navigator = useNavigate();
+    const { theme } = useTheme();
+    const globalCtx = useGlobalContext();
 
     const updateData = async () => {
         axios.get('/dashboard').then((response) => {
@@ -38,14 +41,26 @@ const Dashboard: React.FC = () => {
 
 
     const handleDelete = (id: number) => {
-        axios.delete(`/post/${id}`).then((response) => {
-            console.log(response.data);
+        setEditPost({ show: false, post: new PostInfo({}) });
+        axios.delete(`/deletepost`, {
+            params: {
+                postId: id
+            }
+        }).then((response) => {
+            globalCtx.addAlert({ title: 'Post Deleted', text: 'Post has been deleted successfully.' });
+            const newPosts = myPosts.filter((post) => {
+                return post.id !== id;
+            });
+            setPosts(newPosts);
         }).catch((error) => {
-            console.log(error);
+            if (error.response?.data?.message) {
+                globalCtx.addAlert({ title: 'Post Could not be deleted', text: error.response.data.message });
+                return;
+            }
         });
     }
 
-  
+
     const showPostByIndex = (index: number) => {
         if (index < myPosts.length) {
             const post = myPosts[index];
@@ -59,8 +74,8 @@ const Dashboard: React.FC = () => {
             title: text,
             content: content
         }).then((response) => {
-            const { message, postid } = response.data;
-            setPosts([...myPosts, { title: text, content: content, created_at: new Date().toDateString(), postid: postid, user_id: myInfo?.id || 0 }]);
+            const { message, id } = response.data;
+            setPosts([{ title: text, content: content, created_at: new Date().toUTCString(), id: id, user_id: myInfo?.id || 0, username: myInfo?.user || '' }, ...myPosts]);
             console.log(response.data);
         }).catch((error) => {
             console.log(error);
@@ -69,39 +84,80 @@ const Dashboard: React.FC = () => {
 
     }
 
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigator('/login');
-        }
-        updateData();
-        axios.get('/posts').then((response) => {
-            const { posts } = response.data;
-            if (posts.length === 0) {
-                setPosts([new PostInfo({ title: 'No Posts', content: 'No Posts', created_at: '', postid: 0 })]);
-            }
-            else
-                setPosts(posts);
+    const handleEditPost = (text: string, content: string, id: Number) => {
+        axios.put(`/post/${id}`, {
+            title: text,
+            content: content
+        }).then((response) => {
+            const { message } = response.data;
+            console.log(message);
+            const newPosts = myPosts.map((post) => {
+                if (post.id === id) {
+                    post.title = text;
+                    post.content = content;
+                }
+                return post;
+            });
+            setPosts(newPosts);
         }).catch((error) => {
             console.log(error);
         });
-    }, []);
+        setEditPost({ show: false, post: new PostInfo({}) });
+    }
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigator('/');
+        }
+        else {
+            updateData();
+            axios.get('/posts').then((response) => {
+                const { posts } = response.data;
+                if (posts.length === 0) {
+                    setPosts([new PostInfo({ title: 'No Posts', content: 'You have not post anything yet.', created_at: '', id: 0 })]);
+                }
+                else
+                    setPosts(posts);
+
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+    }, [isAuthenticated]);
     return (
         <div className='outer-dashboard-div'>
-            <div >
+            <div>
                 <MyCard info={myInfo} setInfo={setMyInfo}></MyCard>
                 <div>
                     <div className='d-flex flex-row align-content-center'>
                         <div className='d-flex flex-column w-100'>
-                           <DropdownSearchResults/>
+                            <DropdownSearchResults />
                         </div>
-                        <Button className={Themed("bt-post")} onClick={() => setNewPost(true)}>
+                        <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}>
                             New Post
                         </Button>
-                    </div>                   
+                    </div>
                 </div>
 
-                <div>
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    padding: '0 10px',
+                    borderBottom: '2px solid black',
+                    marginBottom: '10px',
+             
+                    alignSelf: 'center'
+
+                }}>
+                    <Button onClick={() => {
+                        navigator('/globalfeed');
+                    }}
+                        variant='outline-primary'
+                    >Global Feed</Button>
                     <h1>My Posts</h1>
+
                 </div>
 
                 <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }} className='gap-1 d-flex flex-column align-content-center'>
@@ -110,17 +166,18 @@ const Dashboard: React.FC = () => {
                             myPosts.map((post, index) => {
                                 return <Post key={index}
                                     post={post}
-                                    onDelete={() => { handleDelete(post.postid || 0) }} onClick={() => { showPostByIndex(index) }}
+                                    onDelete={() => { handleDelete(post.id || 0) }} onClick={() => { showPostByIndex(index) }}
                                 />
                             })
                     }
                 </div>
                 <PostModal show={newPost} handleClose={() => { setNewPost(false) }} onPost={createPost} />
                 <PostModal show={editPost.show} handleClose={() => { setEditPost({ show: false, post: new PostInfo({}) }) }}
-                    onPost={(title, content, postid) => {
-                        console.log(title, content, postid);
-                        setEditPost({ show: false, post: new PostInfo({}) });
-                    }} post={editPost.post} edit={true} />
+                    onPost={(title, content, id) => {
+                        handleEditPost(title, content, id || -1);
+                    }} post={editPost.post}
+                    onDelete={() => { handleDelete(editPost.post.id || -1) }}
+                    edit={true} />
 
             </div>
         </div>

@@ -5,6 +5,7 @@ import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import Themed from '../Helpers/Themes';
 import UserCard from './UserCards';
 import './dropdownSearch.css';
+import { useNavigate } from 'react-router-dom';
 
 const DropdownSearchResults: React.FC = () => {
     const { theme } = useTheme();
@@ -14,6 +15,7 @@ const DropdownSearchResults: React.FC = () => {
     const [searchUser, setSearchUser] = React.useState<string>("");
     const axios = useAxiosJwt();
     const [width, setWidth] = React.useState<number>(window.innerWidth);
+    const navigator = useNavigate();
 
     const searchForUser = (username: string) => {
         axios.get(`/finduser/${username}`).then((response) => {
@@ -24,6 +26,8 @@ const DropdownSearchResults: React.FC = () => {
             console.log(error);
         });
     }
+
+
 
     React.useEffect(() => {
         window.addEventListener('resize', () => {
@@ -53,12 +57,12 @@ const DropdownSearchResults: React.FC = () => {
                     if (searchHandler) {
                         clearTimeout(searchHandler);
                     }
-                    setSearchHandler(setTimeout(() => { searchForUser(e.target.value); console.log("res") }, 200));
-                }}
+                    setSearchHandler(setTimeout(() => { searchForUser(e.target.value); console.log("res") }, 100));
+                }} value={searchUser}
                     onMouseEnter={
                         () => {
                             console.log('mouse enter');
-                            if (searchUser.length > 0) {
+                            if (searchUser?.length > 0) {
                                 if (searchHandler) {
                                     clearTimeout(searchHandler);
                                 }
@@ -90,10 +94,29 @@ const DropdownSearchResults: React.FC = () => {
                         borderRadius: '5px',
                         margin: 'auto',
                         width: width < 400 ? '100vw' : '80vw',
+
                         }}>
                         {
+                            (searchResult.length === 0 && searchUser.length > 3) ? <div style={{
+                                color: theme === "dark" ? 'white' : 'black',
+                                textAlign: 'center',
+                                border: '1px solid white',
+                                fontSize: '1rem',
+                                borderRadius: '5px',
+                                width: width < 400 ? '100vw' : '80vw',
+
+                            }}>{"No results found for: " + searchUser}</div> :
                             searchResult.map((post, index) => {
-                                return <UserCard key={index} username={post.user} mail={post.email} created_at={post.created_at} onClick={() => { console.log(post.id) }} />
+                                return <UserCard key={index} username={post.user} mail={post.email} created_at={post.created_at} onClick={() => { 
+                                    setSearchUser("");
+                                    if (searchHandler) {
+                                        clearTimeout(searchHandler);
+                                    }
+                                    setShowSearchResult(false);
+                                    setSearchResult([]);
+                                    navigator("/users/" + post.id);
+                                    
+                                }} />
                             })
                         }
                     </div>

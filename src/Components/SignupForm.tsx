@@ -3,12 +3,10 @@ import { ErrorProps } from './Interfaces/ErrorMessage';
 import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 
-interface SignupFormProps {
-    handleLoading: (loading: boolean, statement?: string) => void;
-}
 
-const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
+const SignupForm: React.FC = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,14 +17,19 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
     const [errors, setErrors] = React.useState<Array<ErrorProps>>([]);
     const { handleToken } = useAuth();
     const navigator = useNavigate();
+    const { setShowLoading,setLoadingText } = useGlobalContext();
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        handleLoading(true, "creating user");
+        setErrors([]);
+        setLoadingText("Signing up");
+        setShowLoading(true);
         if (password !== passwordConfirm) {
             setErrors([{ target: 'passwordConfirm', message: 'Passwords do not match' }]);
-            handleLoading(false);
+            setShowLoading(false);
             return;
         }
+
         const parseError = (message: string) => {
             setErrors([]);
             if (!message) {
@@ -51,8 +54,8 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
                 handleToken(response.data.accessToken);
                 console.log("token:", response.data.accessToken);
             }
+            setShowLoading(false);
             navigator("./dashboard");
-            handleLoading(false);
         }).catch((error) => {
             console.log(error);
             if (!error.response?.data) {
@@ -60,8 +63,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleLoading }) => {
             }
             else
                 parseError(error.response?.data?.message);
-            handleLoading(false);
-        })
+        }).finally(() => {
+            setShowLoading(false);
+        });
 
     };
 

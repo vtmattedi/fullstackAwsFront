@@ -5,18 +5,17 @@ import Logo from '../logo2.svg';
 import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-interface LoginFormProps {
-    handleLoading: (loading: boolean, statement?: string) => void;
-}
+import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 
 
-const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
+const LoginForm: React.FC = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [width, setWidth] = React.useState(window.innerWidth);
     const [errors, setErrors] = React.useState<Array<ErrorProps>>([]);
     const { handleToken } = useAuth();
+    const { setLoadingText, setShowLoading } = useGlobalContext();
     const navigator = useNavigate();
 
     const axios = useAxios();
@@ -37,8 +36,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleLoading(true, "Logging in");
         setErrors([]);
+        setLoadingText("Logging in");
+        setShowLoading(true);
         axios.post('/login', {
             email: email,
             password: password
@@ -47,15 +47,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ handleLoading }) => {
             if (response?.data?.accessToken) {
                 handleToken(response.data.accessToken);
             }
+            setShowLoading(false);
             navigator('/dashboard');
-            handleLoading(false);
+
         }).catch((error) => {
             if (!error.response?.data) {
                 setErrors([{ target: 'body', message: 'Server error.' }]);
             }
             console.log(error.response?.data);
             parseError(error.response?.data?.message);
-            handleLoading(false);
+            setShowLoading(false);
         });
     };
 

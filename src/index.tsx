@@ -7,16 +7,19 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './Context/AuthContext';
 import { ThemeProvider } from './Context/MyThemeContext';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Router } from 'express';
 import NotFound from './Pages/notfound';
 import Login from './Pages/login';
 import Dashboard from './Pages/Dashboard';
 import "./common.css";
+import { GlobalProvider } from './Context/GlobalLoadingAndAlert';
+import  LandingPage  from './Pages/LandingPage';
+import Others from './Pages/Others';
+import Globalfeed from './Pages/Globalfeed';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <LandingPage />,
     errorElement: <NotFound />,
   },
   {
@@ -28,9 +31,18 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
     errorElement: <NotFound />,
+  },
+  {
+    path: "/globalfeed",
+    element: <Globalfeed />,
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/users/:id",
+    element: <Others />,
+    errorElement: <NotFound />,
   }
 
-  // Add more routes here as needed
 ]);
 
 const root = ReactDOM.createRoot(
@@ -41,11 +53,15 @@ root.render(
 
   <AuthProvider>
     <ThemeProvider>
-      <div className='topdiv'>
-        <div className='topdiv-sub1' >
-        <RouterProvider router={router} />
+      <GlobalProvider>
+        <div className='topdiv'>
+          <div className='topdiv-sub1' >
+            <App >
+              <RouterProvider router={router} />
+            </App>
+          </div>
         </div>
-      </div>
+      </GlobalProvider>
     </ThemeProvider>
   </AuthProvider >
 

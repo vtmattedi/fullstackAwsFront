@@ -46,11 +46,16 @@
 .username-input
 {
     background-color: transparent;
-    border: 1px solid white;
-    color: white;
+    border: 1px solid black;
+    color: black;
     width: 100%;
     text-align: left;
 
+}
+.username-input.custom-dark-mode
+{
+    color: white;
+    border: 1px solid white;
 }
 
 .username-input::selection

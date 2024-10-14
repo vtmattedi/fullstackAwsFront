@@ -9,11 +9,12 @@ interface PostModalProps {
     show?: boolean;
     handleClose?: () => void;
     post?: PostInfo;
-    onPost?: (title: string, content: string, postid?: number) => void;
+    onPost?: (title: string, content: string, id?: number) => void;
     edit?: boolean;
+    onDelete?: () => void;
 }
 
-const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, edit }) => {
+const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, edit, onDelete }) => {
     const { theme, toggleTheme } = useTheme();
     const [title, setTitle] = React.useState("");
     const [content, setContent] = React.useState("");
@@ -21,7 +22,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
     const Post = () => {
         if (edit) {
             if (onPost) {
-                onPost(title, content, post?.postid);
+                onPost(title, content, post?.id);
             }
         }
         else {
@@ -31,7 +32,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
         setContent("");
     }
 
-   
+
     React.useEffect(() => {
         if (post) {
             setTitle(post.title || "");
@@ -42,7 +43,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
     return (
         <Modal show={show} centered data-bs-theme={theme}>
             <Modal.Header>
-                
+
                 <Modal.Title className='w-100'>
                     <p className={Themed("new-post-info")}> {edit ? "Edit Post" : "New Post"}</p>
                     <input className={Themed("new-post-title")} type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -55,6 +56,15 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                 <textarea className={Themed("new-post-input")} placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} />
             </Modal.Body>
             <Modal.Footer>
+                <div>
+                <Button variant="danger" onClick={onDelete}
+                    style={{
+                        fontWeight: 'bold',
+                    }}>
+                    Delete Post
+                </Button>
+                </div>
+
                 <Button variant="danger" onClick={handleClose}>
                     Cancel
                 </Button>
@@ -65,6 +75,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                     }}>
                     {edit ? "Edit" : "Post"}
                 </Button>
+            
                 {/* <Button variant="primary" onClick={() => { toggleTheme("1000") }}
                     style={{
                         fontWeight: 'bold',
