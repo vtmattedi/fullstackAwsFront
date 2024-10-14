@@ -85,9 +85,12 @@ const Dashboard: React.FC = () => {
     }
 
     const handleEditPost = (text: string, content: string, id: Number) => {
-        axios.put(`/post/${id}`, {
-            title: text,
-            content: content
+        axios.put(`/editpost`, {
+            
+                postId: id,
+                title: text,
+                content: content
+            
         }).then((response) => {
             const { message } = response.data;
             console.log(message);
@@ -147,7 +150,7 @@ const Dashboard: React.FC = () => {
                     padding: '0 10px',
                     borderBottom: '2px solid black',
                     marginBottom: '10px',
-             
+
                     alignSelf: 'center'
 
                 }}>

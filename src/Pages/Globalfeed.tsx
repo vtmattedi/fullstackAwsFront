@@ -18,10 +18,51 @@ const Globalfeed: FC = () => {
     const { userId } = useAuth();
     const [querryNewInterval, setQuerryNewInterval] = React.useState<NodeJS.Timer | undefined>(undefined);
     const [firstLoad, setFirstLoad] = React.useState<boolean>(true);    
+    const {isAuthenticated} = useAuth();
+    useMemo (() => {
+        if (querryNewInterval) {
+            clearInterval(querryNewInterval);
+        }
+        const intervalId = setInterval(() => {
+            const currentid = posts.length > 0 || !posts ? posts[0].id : 0;
+            axios.get('newposts', {
+                params: {
+                    lastId: currentid,
+                }
+            }).then((response) => {
+                let newPosts = posts;
+                console.log(response.data?.posts.length, response.data?.deleted.length);
+                if (response.data?.posts) {
+                    newPosts = [...response.data.posts, ...posts];
+                }
+                if (response.data?.deleted) {
+                    const delArray = response.data?.deleted;
+                    newPosts = newPosts.filter((post) => {
+                        return !delArray.includes(post.id);
+                    });
+                }
+                setPosts(newPosts);
+            }).catch((error) => {
+                console.log(error);
+            })}, 500);
+        setQuerryNewInterval(intervalId);
 
-
+        return () => {
+            if (querryNewInterval) {
+                clearInterval(querryNewInterval);
+            }
+        }
+    }, [posts]);
 
     useEffect(() => {
+        if (!isAuthenticated)
+        {
+            if (querryNewInterval) {
+                clearInterval(querryNewInterval);
+            }
+            
+            navigator('/login');
+        }
         if (firstLoad) {
             axios.get('allposts', {
                 params: {
@@ -37,37 +78,7 @@ const Globalfeed: FC = () => {
             setFirstLoad(false);
         }
 
-        if (querryNewInterval) {
-            clearInterval(querryNewInterval);
-        }
-        const intervalId = setInterval(() => {
-            const currentid = posts.length > 0 || !posts ? posts[0].id : 0;
-            axios.get('newposts', {
-                params: {
-                    lastId: currentid,
-                }
-            }).then((response) => {
-                let newPosts = posts;
-                if (response.data?.posts) {
-                    newPosts = [...response.data.posts, ...posts];
-                }
-                if (response.data?.deleted) {
-                    const delArray = response.data?.deleted;
-                    newPosts = posts.filter((post) => {
-                        return !delArray.includes(post.id);
-                    });
-                }
-                setPosts(newPosts);
-                console.log(response.data);
-            }).catch((error) => {
-                console.log(error);
-            })}, 10000);
-        setQuerryNewInterval(intervalId);
-;
       
-
-
-
         window.addEventListener('resize', () => {
             setWidth(window.innerWidth);
         });
@@ -83,7 +94,7 @@ const Globalfeed: FC = () => {
 
 
     return (
-        <div className='w-100 border'
+        <div className='w-100'
             style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -120,7 +131,6 @@ const Globalfeed: FC = () => {
                 scrollbarWidth: 'none',
                 height: '87vh',
                 borderRadius: '5px',
-                border: '1px solid black',
                 gap: '4px',
             }}>
                 {posts.map((post) => {

@@ -56,7 +56,10 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                 <textarea className={Themed("new-post-input")} placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} />
             </Modal.Body>
             <Modal.Footer>
-                <div>
+                {
+                    edit &&
+
+                    <div>
                 <Button variant="danger" onClick={onDelete}
                     style={{
                         fontWeight: 'bold',
@@ -64,6 +67,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                     Delete Post
                 </Button>
                 </div>
+                }
 
                 <Button variant="danger" onClick={handleClose}>
                     Cancel
