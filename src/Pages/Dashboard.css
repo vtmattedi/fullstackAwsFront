@@ -1,6 +1,7 @@
 
 .bt-post
 {
+
     width: 140px;
     height: 80%;
     margin:auto;
@@ -10,18 +11,28 @@
 }
 
 
-.bt-post.custom-dark-mode
+.bt-globalfeed
+{
+    width: 100px;
+    height: 80%;
+    margin:auto;
+    color:white;
+    font-weight: bold;
+}
+
+.bt-post.custom-dark-mode, .bt-globalfeed.custom-dark-mode
 {
     background-color: #2c2b2b;
     color: white;
 }
-.bt-post:hover
+.bt-post:hover .bt-globalfeed:hover
+
 {
     transition: 0.5s;
     cursor: pointer;
 
 }
-.bt-post.custom-dark-mode:hover
+.bt-post.custom-dark-mode:hover, .bt-globalfeed.custom-dark-mode:hover
 {
     transition: 0.5s;
     cursor: pointer;

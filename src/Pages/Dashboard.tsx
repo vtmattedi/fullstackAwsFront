@@ -41,7 +41,10 @@ const Dashboard: React.FC = () => {
 
 
     const handleDelete = (id: number) => {
-        setEditPost({ show: false, post: new PostInfo({}) });
+        if (id === -1) {
+            setEditPost({ show: false, post: new PostInfo({}) });
+            return;
+        }
         axios.delete(`/deletepost`, {
             params: {
                 postId: id
@@ -51,6 +54,9 @@ const Dashboard: React.FC = () => {
             const newPosts = myPosts.filter((post) => {
                 return post.id !== id;
             });
+            if (newPosts.length === 0) {
+                newPosts.push(new PostInfo({ title: 'No Posts', content: 'You have not post anything yet.', created_at: '', id: -1 }));
+            }
             setPosts(newPosts);
         }).catch((error) => {
             if (error.response?.data?.message) {
@@ -58,6 +64,8 @@ const Dashboard: React.FC = () => {
                 return;
             }
         });
+        setEditPost({ show: false, post: new PostInfo({}) });
+
     }
 
 
@@ -75,7 +83,7 @@ const Dashboard: React.FC = () => {
             content: content
         }).then((response) => {
             const { message, id } = response.data;
-            setPosts([{ title: text, content: content, created_at: new Date().toUTCString(), id: id, user_id: myInfo?.id || 0, username: myInfo?.user || '' }, ...myPosts]);
+            setPosts([{ title: text, content: content, created_at: new Date().toUTCString(), id: id, user_id: myInfo?.id || 0, username: myInfo?.user || '' }, ...myPosts.filter((post) => post.id !== -1)]);
             console.log(response.data);
         }).catch((error) => {
             console.log(error);
@@ -86,11 +94,11 @@ const Dashboard: React.FC = () => {
 
     const handleEditPost = (text: string, content: string, id: Number) => {
         axios.put(`/editpost`, {
-            
-                postId: id,
-                title: text,
-                content: content
-            
+
+            postId: id,
+            title: text,
+            content: content
+
         }).then((response) => {
             const { message } = response.data;
             console.log(message);
@@ -117,7 +125,7 @@ const Dashboard: React.FC = () => {
             axios.get('/posts').then((response) => {
                 const { posts } = response.data;
                 if (posts.length === 0) {
-                    setPosts([new PostInfo({ title: 'No Posts', content: 'You have not post anything yet.', created_at: '', id: 0 })]);
+                    setPosts([new PostInfo({ title: 'No Posts', content: 'You have not post anything yet.', created_at: '', id: -1 })]);
                 }
                 else
                     setPosts(posts);
@@ -132,13 +140,21 @@ const Dashboard: React.FC = () => {
             <div>
                 <MyCard info={myInfo} setInfo={setMyInfo}></MyCard>
                 <div>
-                    <div className='d-flex flex-row align-content-center'>
+                    <div className='d-flex flex-row align-content-center p-2 align-items-center'>
                         <div className='d-flex flex-column w-100'>
                             <DropdownSearchResults />
                         </div>
-                        <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}>
-                            New Post
-                        </Button>
+                        <div className='d-flex flex-row gap-2'>
+                            <Button onClick={() => {
+                                navigator('/globalfeed');
+                            }}
+                                className={Themed("bt-globalfeed")} variant={theme === "light" ? "primary" : ""}
+                            ><div className='bi bi-globe-americas'
+                                style={{ fontSize: '1em' }}></div></Button>
+                            <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}>
+                                New Post
+                            </Button>
+                        </div>
                     </div>
                 </div>
 
@@ -150,16 +166,8 @@ const Dashboard: React.FC = () => {
                     padding: '0 10px',
                     borderBottom: '2px solid black',
                     marginBottom: '10px',
-
                     alignSelf: 'center'
-
                 }}>
-                    <Button onClick={() => {
-                        navigator('/globalfeed');
-                    }}
-                        variant='outline-primary'
-                    >Global Feed</Button>
-                    <h1>My Posts</h1>
 
                 </div>
 
@@ -169,7 +177,7 @@ const Dashboard: React.FC = () => {
                             myPosts.map((post, index) => {
                                 return <Post key={index}
                                     post={post}
-                                    onDelete={() => { handleDelete(post.id || 0) }} onClick={() => { showPostByIndex(index) }}
+                                    onDelete={() => { handleDelete(post.id || 0) }} onClick={() => { if (post.id !== -1) showPostByIndex(index) }}
                                 />
                             })
                     }

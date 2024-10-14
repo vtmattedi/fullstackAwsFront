@@ -90,7 +90,7 @@ const Globalfeed: FC = () => {
                 clearInterval(querryNewInterval);
             }
         }
-    }, [posts]);
+    }, [isAuthenticated]);
 
 
     return (

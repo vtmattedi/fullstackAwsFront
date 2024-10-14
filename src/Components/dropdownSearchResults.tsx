@@ -49,8 +49,17 @@ const DropdownSearchResults: React.FC = () => {
                     clearTimeout(searchHandler);
                 }
                 setSearchHandler(setTimeout(() => { setShowSearchResult(false) }, 200));
-            }
-        } >
+            }}
+            onKeyDown={
+                (e) => {
+                    if (e.key === 'Escape') {
+                        setShowSearchResult(false);
+                    }
+                    else if (e.key === 'Enter') {
+                        setShowSearchResult(false);
+                    }
+                }
+            } >
             <div className={Themed("input-search-div")}>
                 <input type='text' placeholder='Search a User' onChange={(e) => {
                     setSearchUser(e.target.value);

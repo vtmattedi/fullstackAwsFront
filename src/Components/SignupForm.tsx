@@ -55,7 +55,7 @@ const SignupForm: React.FC = () => {
                 console.log("token:", response.data.accessToken);
             }
             setShowLoading(false);
-            navigator("./dashboard");
+            navigator("/dashboard");
         }).catch((error) => {
             console.log(error);
             if (!error.response?.data) {
