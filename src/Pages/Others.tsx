@@ -46,7 +46,7 @@ const Others: React.FC = () => {
             axios.get('/posts/' + uid).then((response) => {
                 const { posts } = response.data;
                 if (posts.length === 0) {
-                    setPosts([new PostInfo({ title: 'No Posts', content: 'No This user have not post anything yet.', created_at: '', id: 0 })]);
+                    setPosts([new PostInfo({ title: 'No Posts', content: 'This user have not post anything yet.', created_at: '', id: 0 })]);
                 }
                 else
                     setPosts(posts);

@@ -8,6 +8,8 @@ import { useTheme } from '../Context/MyThemeContext';
 import Themed from '../Helpers/Themes';
 import { useNavigate } from 'react-router-dom';
 import Menu from './menu';
+import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
+import { Tooltip } from 'react-tooltip';
 
 interface MyCardProps {
     info?: {
@@ -30,7 +32,20 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
     const [width, setWidth] = React.useState<number>(0);
     const { handleLogout } = useAuth();
     const navigator = useNavigate();
+    const globalCtx = useGlobalContext();
 
+    const deleteAccount = () => {
+    
+        axios.delete('/deleteuser').then((response) => {
+            globalCtx.addAlert({ title: 'Account Deleted', text: 'Account has been deleted successfully.' });
+            handleLogout();
+            navigator('/login');
+            
+        }).catch((error) => {
+            globalCtx.addAlert({ title: 'Account could not be deleted', text: error.response.data });
+        })
+    
+    }
 
     const captilize = (str?: string) => {
         if (str)
@@ -103,6 +118,7 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
 
                     }}
                 >
+                    <div>
                     <div className='img-title-div'>
                         <img src={logo} className='profile-photo' alt='profile' />
                         <div className='username-div' >
@@ -112,6 +128,8 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
                             <input ref={inputRef} type='text' value={currentUser} onChange={(e) => setCurrentUser(e.target.value)}
                                 className={Themed('username username-input')} style={{ display: editMode ? 'block' : 'none' }} />
                         </div>
+                    </div>
+                    <p className='email'>{info?.email || "No email"}</p>
                     </div>
                     <div>
                         <Menu>
@@ -125,6 +143,7 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
                                         <Dropdown.Item as="button" onClick={() => { logout(false) }}>Logout</Dropdown.Item>
                                         <Dropdown.Item as="button" onClick={() => { setShowConfirm(true) }}>Logout Everywhere</Dropdown.Item>
                                     </DropdownButton>
+
                                 </div>
 
                                 <Button onClick={() => { toggleTheme() }}
@@ -136,7 +155,17 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
                                         fontFamily: 'inherit',
                                         fontWeight: 'bold'
                                     }}>
+
                                     {(theme === "dark" ? "Light" : "Dark") + " Theme"}</Button>
+                                <Button onClick={deleteAccount} variant={'danger'}
+                                    style={{
+                                        width: '95%',
+                                        padding: '2px',
+                                        marginTop: '5px',
+                                        fontFamily: 'inherit',
+                                        fontWeight: 'bold'
+                                    }}
+                                >{"Delete Account"}</Button>
                                 <Modal show={showConfirm} centered data-bs-theme={theme} style={
                                     {
                                         color: theme === 'dark' ? 'white' : 'black'
@@ -157,10 +186,7 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
                         </Menu>
                     </div>
                 </div>
-
             </div>
-            <p className='email'>{info?.email || "No email"}</p>
-
         </div>
 
     );

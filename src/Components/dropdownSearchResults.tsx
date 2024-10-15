@@ -1,11 +1,11 @@
 import React from 'react';
-import { Collapse } from 'react-bootstrap';
 import { useTheme } from '../Context/MyThemeContext';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import Themed from '../Helpers/Themes';
 import UserCard from './UserCards';
 import './dropdownSearch.css';
 import { useNavigate } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip';
 
 const DropdownSearchResults: React.FC = () => {
     const { theme } = useTheme();
@@ -27,8 +27,7 @@ const DropdownSearchResults: React.FC = () => {
         });
     }
 
-
-
+ 
     React.useEffect(() => {
         window.addEventListener('resize', () => {
         setWidth(window.innerWidth);
@@ -68,6 +67,7 @@ const DropdownSearchResults: React.FC = () => {
                     }
                     setSearchHandler(setTimeout(() => { searchForUser(e.target.value); console.log("res") }, 100));
                 }} value={searchUser}
+                data-tooltip-id='search-bar-tooltip'
                     onMouseEnter={
                         () => {
                             console.log('mouse enter');
@@ -131,6 +131,7 @@ const DropdownSearchResults: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <Tooltip id={"search-bar-tooltip"}>Press enter or type at least 3 letters to search</Tooltip>
         </div>
     );
 };

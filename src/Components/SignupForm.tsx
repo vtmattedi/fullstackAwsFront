@@ -4,7 +4,7 @@ import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
-
+import { Tooltip } from 'react-tooltip';
 
 const SignupForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -100,6 +100,7 @@ const SignupForm: React.FC = () => {
                                 }
                             }}
                             required
+                            data-tooltip-id='signup-email-tooltip'
                         />
                     </div>
                     {errors?.filter((error) => error.target === 'email').map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
@@ -162,6 +163,7 @@ const SignupForm: React.FC = () => {
 
                 <button type="submit" className='go-button'>Sign Up</button>
             </form>
+            <Tooltip id={"signup-email-tooltip"}>You can use a mock email here!</Tooltip>
         </div>
     );
 };

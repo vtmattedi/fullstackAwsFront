@@ -27,7 +27,7 @@ const MyCard: React.FC<MyCardProps> = ({ info }) => {
     const axios = useAxiosJwt();
     const axiosLogout = useAxios();
     const { theme, toggleTheme } = useTheme();
-    const [width, setWidth] = React.useState<number>(0);
+    const [width, setWidth] = React.useState<number>(window.innerWidth);
     const { handleLogout } = useAuth();
     const navigator = useNavigate();
 
@@ -38,23 +38,7 @@ const MyCard: React.FC<MyCardProps> = ({ info }) => {
             return str?.charAt(0)?.toUpperCase() + str.slice(1);
     }
 
-    const logout = (everywhere?: boolean) => {
-        handleLogout();
-        let logout = `/logout`;
-        if (everywhere) {
-            logout = `/logoutEveryone`;
-        }
-        axiosLogout.delete(logout).then((response) => {
-            console.log(response.data);
-        }
-        ).catch((error) => {
-            console.log(error);
-        }).finally(() => {
-            setShowConfirm(false);
-            navigator('/login');
-        });
-
-    }
+    
     useEffect(() => {
         setCurrentUser(captilize(info?.user) || "");
         window.addEventListener('resize', () => {

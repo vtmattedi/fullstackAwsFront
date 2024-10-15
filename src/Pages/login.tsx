@@ -17,10 +17,12 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      console.log("isAuthenticated");
       navigate('/dashboard', { replace: true });
     }
     getToken().then(
       (response) => {
+        console.log(response);
         if (response) {
           navigate('/dashboard', { replace: true });
         }

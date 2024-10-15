@@ -13,17 +13,14 @@
    
 }
 .input-search-div input {
-    width: 60%;
+    width: 80%;
     max-width: 400px;
     font-size: 1em;
     border-radius: 10px;
 }
-.input-search-div input::after {
-content: "🌙";
-margin-left: 5px;
-}
+
 .input-search-div input:focus {
-    width:  80%;
+    width:  100%;
     max-width: 800px; 
     transition: width linear 0.3s;
 }

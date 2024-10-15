@@ -6,6 +6,8 @@ import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
+import { time } from 'console';
+import { Tooltip } from 'react-tooltip';
 
 
 const LoginForm: React.FC = () => {
@@ -43,7 +45,7 @@ const LoginForm: React.FC = () => {
             email: email,
             password: password
         }).then((response) => {
-        
+
             if (response?.data?.accessToken) {
                 handleToken(response.data.accessToken);
             }
@@ -58,6 +60,7 @@ const LoginForm: React.FC = () => {
             parseError(error.response?.data?.message);
             setShowLoading(false);
         });
+
     };
 
     useEffect(() => {
@@ -74,7 +77,7 @@ const LoginForm: React.FC = () => {
         <div className="outter-input-div">
             <img src={Logo} alt='logo' className='logo'></img>
             <form onSubmit={handleSubmit}>
-            {errors?.filter((error) => error.target === 'body' || error.target === `creds`).map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
+                {errors?.filter((error) => error.target === 'body' || error.target === `creds`).map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
 
                 <div className='middle-div'>
                     <div className="input-div" style={
@@ -82,6 +85,7 @@ const LoginForm: React.FC = () => {
                             flexDirection: width < 450 ? 'column' : 'row'
                         }
                     }>
+
                         <label>Email:</label>
                         <input
                             type="email"
@@ -89,6 +93,7 @@ const LoginForm: React.FC = () => {
                             autoComplete="email"
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            data-tooltip-id='login-email-tooltip'
                         />
                     </div>
                     {errors?.filter((error) => error.target === 'email').map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
@@ -105,6 +110,7 @@ const LoginForm: React.FC = () => {
                             value={password}
                             autoComplete="current-password"
                             onChange={(e) => setPassword(e.target.value)}
+                            data-tooltip-id='login-password-tooltip'
                             required
                         />
                     </div>
@@ -112,7 +118,10 @@ const LoginForm: React.FC = () => {
                 </div>
                 <button type="submit" className='go-button'>Login</button>
             </form>
+            <Tooltip id='login-email-tooltip' place='top'>Try out using test@test.com or create an account on the sign up page</Tooltip>
+            <Tooltip id='login-password-tooltip' place='top' >Enter your password or test1234 for the test account</Tooltip>
         </div>
+        
     );
 };
 

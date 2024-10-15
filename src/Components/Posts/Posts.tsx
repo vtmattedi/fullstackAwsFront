@@ -35,7 +35,6 @@ const Post: React.FC<PostProps> = ({ post, onDelete, onClick, style }) => {
                 {
                     width: width < 400 ? '100%' : '75%',
                     maxWidth: '800px',
-
                     minWidth: '375px'
                 }}>
                     <Card.Header>

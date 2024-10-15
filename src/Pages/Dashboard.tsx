@@ -16,6 +16,7 @@ import { Button } from 'react-bootstrap';
 import { useTheme } from '../Context/MyThemeContext';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 import DropdownSearchResults from '../Components/DropdownSearchResults';
+import { Tooltip } from 'react-tooltip';
 
 const Dashboard: React.FC = () => {
     const axios = useAxiosJwt();
@@ -27,6 +28,7 @@ const Dashboard: React.FC = () => {
     const [editPost, setEditPost] = React.useState<{ show: boolean, post: PostInfo }>({ show: false, post: new PostInfo({ title: '', content: '', created_at: '', id: 0, user_id: 0 }) });
     const navigator = useNavigate();
     const { theme } = useTheme();
+    const [width, setWidth] = React.useState<number>(window.innerWidth);
     const globalCtx = useGlobalContext();
 
     const updateData = async () => {
@@ -134,6 +136,15 @@ const Dashboard: React.FC = () => {
                 console.log(error);
             });
         }
+        window.addEventListener('resize', () => {
+            setWidth(window.innerWidth);
+        }
+        );
+        return () => {
+            window.removeEventListener('resize', () => {
+                setWidth(window.innerWidth);
+            });
+        }
     }, [isAuthenticated]);
     return (
         <div className='outer-dashboard-div'>
@@ -145,14 +156,17 @@ const Dashboard: React.FC = () => {
                             <DropdownSearchResults />
                         </div>
                         <div className='d-flex flex-row gap-2'>
+                            
                             <Button onClick={() => {
                                 navigator('/globalfeed');
                             }}
+                            data-tooltip-id='global-button-tooltip'
                                 className={Themed("bt-globalfeed")} variant={theme === "light" ? "primary" : ""}
                             ><div className='bi bi-globe-americas'
                                 style={{ fontSize: '1em' }}></div></Button>
                             <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}>
-                                New Post
+                              {width < 500 ? <div className='bi bi-plus-circle'/>:
+                              <div style={{minWidth:'100px'}}>New Post</div>}
                             </Button>
                         </div>
                     </div>
@@ -171,7 +185,7 @@ const Dashboard: React.FC = () => {
 
                 </div>
 
-                <div style={{ maxHeight: '50vh', overflowY: 'scroll', overflowX: 'hidden' }} className='gap-1 d-flex flex-column align-content-center'>
+                <div style={{ maxHeight: '70vh', overflowY: 'scroll', overflowX: 'hidden' }} className='gap-1 d-flex flex-column align-content-center'>
                     {
                         myPosts.length === 0 ? <Skeleton count={1} /> :
                             myPosts.map((post, index) => {
@@ -191,6 +205,7 @@ const Dashboard: React.FC = () => {
                     edit={true} />
 
             </div>
+            <Tooltip id={"global-button-tooltip"}>Check what others are thinking</Tooltip>
         </div>
     );
 };

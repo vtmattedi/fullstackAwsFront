@@ -66,7 +66,7 @@ const Globalfeed: FC = () => {
         if (firstLoad) {
             axios.get('allposts', {
                 params: {
-                    size: 10,
+                    size: 50,
                 }
             }).then((response) => {
                 setPosts(response.data.posts);
