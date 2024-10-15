@@ -18,7 +18,7 @@ const AboutMe: React.FC = () => {
                 <div>
                     <p style={
                         {
-                            fontSize: '1.2rem',
+                            fontSize: '1rem',
                             textAlign: 'justify',
                             padding: '10px',
                         }

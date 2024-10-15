@@ -73,6 +73,7 @@ const PostModal: React.FC<PostModalProps> = ({ show, handleClose, post, onPost, 
                     Cancel
                 </Button>
                 <Button variant="primary" onClick={Post}
+                    disabled={title.length === 0 || content.length === 0}
                     style={{
                         fontWeight: 'bold',
                         minWidth: '100px'
