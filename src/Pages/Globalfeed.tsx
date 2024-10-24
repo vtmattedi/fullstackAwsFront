@@ -1,13 +1,15 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useTheme } from '../Context/MyThemeContext';
-import Themed from '../Helpers/Themes';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import PostInfo from '../Types/PostInfo';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 import Post from '../Components/Posts/Posts';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
+import { Commet } from 'react-loading-indicators';
 import GoBackButton from '../Components/GoBackButton';
+import { Button } from 'react-bootstrap';
+
 const Globalfeed: FC = () => {
     const { theme } = useTheme();
     const [width, setWidth] = React.useState<number>(window.innerWidth);
@@ -17,13 +19,37 @@ const Globalfeed: FC = () => {
     const navigator = useNavigate();
     const { userId } = useAuth();
     const [querryNewInterval, setQuerryNewInterval] = React.useState<NodeJS.Timer | undefined>(undefined);
-    const [firstLoad, setFirstLoad] = React.useState<boolean>(true);    
-    const {isAuthenticated} = useAuth();
-    useMemo (() => {
-        if (querryNewInterval) {
-            clearInterval(querryNewInterval);
+    const [firstLoad, setFirstLoad] = React.useState<boolean>(true);
+    const { isAuthenticated } = useAuth();
+    const intref = React.useRef<NodeJS.Timer | undefined>(undefined);
+    const [loadingFinished, setLoadingFinished] = React.useState<boolean>(false);
+    const [showError, setShowError] = React.useState<boolean>(false);
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            clearInterval(intref.current);
+            navigator('/login');
         }
-        const intervalId = setInterval(() => {
+        if (firstLoad) {
+            axios.get('allposts', {
+                params: {
+                    size: 50,
+                }
+            }).then((response) => {
+                setPosts(response.data.posts);
+                console.log(response.data.posts);
+                setLoadingFinished(true);
+            }).catch((error) => {
+                console.log(error);
+                setShowError(true);
+            }
+            );
+            setFirstLoad(false);
+        }
+
+        clearInterval(intref.current);
+
+        intref.current = setInterval(() => {
             const currentid = posts.length > 0 || !posts ? posts[0].id : 0;
             axios.get('newposts', {
                 params: {
@@ -44,41 +70,9 @@ const Globalfeed: FC = () => {
                 setPosts(newPosts);
             }).catch((error) => {
                 console.log(error);
-            })}, 500);
-        setQuerryNewInterval(intervalId);
+            })
+        }, 500);
 
-        return () => {
-            if (querryNewInterval) {
-                clearInterval(querryNewInterval);
-            }
-        }
-    }, [posts]);
-
-    useEffect(() => {
-        if (!isAuthenticated)
-        {
-            if (querryNewInterval) {
-                clearInterval(querryNewInterval);
-            }
-            
-            navigator('/login');
-        }
-        if (firstLoad) {
-            axios.get('allposts', {
-                params: {
-                    size: 50,
-                }
-            }).then((response) => {
-                setPosts(response.data.posts);
-                console.log(response.data.posts);
-            }).catch((error) => {
-                console.log(error);
-            }
-            );
-            setFirstLoad(false);
-        }
-
-      
         window.addEventListener('resize', () => {
             setWidth(window.innerWidth);
         });
@@ -86,11 +80,10 @@ const Globalfeed: FC = () => {
             window.removeEventListener('resize', () => {
                 setWidth(window.innerWidth);
             });
-            if (querryNewInterval) {
-                clearInterval(querryNewInterval);
-            }
+
+            intref.current && clearInterval(intref.current);
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, posts]);
 
 
     return (
@@ -100,7 +93,7 @@ const Globalfeed: FC = () => {
                 flexDirection: 'column',
                 width: '100%',
                 maxWidth: '100%',
-                marginTop: '5px;',
+                marginTop: '5px',
                 overflowX: 'hidden',
                 overflowY: 'hidden',
                 boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.2)'
@@ -133,22 +126,32 @@ const Globalfeed: FC = () => {
                 borderRadius: '5px',
                 gap: '4px',
             }}>
-                {posts.map((post) => {
-                    return (
-                        <Post key={post.id} post={post} onClick={() => {
-                            if (querryNewInterval) {
-                                clearInterval(querryNewInterval);
-                            }
-                             navigator('/users/' + post.user_id);
-                        }} style={
-                            {
-                                width: '100%',
-                            }
+                {!loadingFinished ? <Commet color={'orange'} /> :
+                        posts.map((post) => {
+                            return (
+                                <Post key={post.id} post={post} onClick={() => {
+                                    if (querryNewInterval) {
+                                        clearInterval(querryNewInterval);
+                                    }
+                                    navigator('/users/' + post.user_id);
+                                }} style={
+                                    {
+                                        width: '100%',
+                                    }
 
-                        } />
-                    );
-                })
+                                } />
+                            );
+                        })
                 }
+                {showError &&
+                    <div style={{ color: 'red', textAlign: 'center', fontSize: "1.5em" }}>
+                        <p>An error occurred while loading the posts</p>
+                        <Button onClick={() => { navigator("/") }} variant='outline-danger'
+                            size='lg' 
+                            > Go Back</Button>
+                    </div>
+                }
+
             </div>
         </div>
     );

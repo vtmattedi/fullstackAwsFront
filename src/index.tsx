@@ -1,5 +1,5 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import './Css/general.css';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -9,11 +9,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './Pages/notfound';
 import Login from './Pages/login';
 import Dashboard from './Pages/Dashboard';
-import "./common.css";
 import { GlobalProvider } from './Context/GlobalLoadingAndAlert';
 import  LandingPage  from './Pages/LandingPage';
 import Others from './Pages/Others';
 import Globalfeed from './Pages/Globalfeed';
+import Test from './Pages/Test';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +40,14 @@ const router = createBrowserRouter([
     path: "/users/:id",
     element: <Others />,
     errorElement: <NotFound />,
+  },
+  {
+    path: "/404",
+    element: <NotFound />,
+  },
+  {
+    path: "/test",
+    element: <Test />,
   }
 
 ]);

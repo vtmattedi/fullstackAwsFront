@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { FourSquare } from 'react-loading-indicators';
 import './loading.css';
-import Logo from '../logo2.svg';
+import Logo from '../Assets/logo2.svg';
 interface LoadingProps {
     text?: String;
 

@@ -1,6 +1,6 @@
+import '../Css/PostModal.css';
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import './PostModal.css';
 import { useTheme } from '../Context/MyThemeContext';
 import PostInfo from '../Types/PostInfo';
 import calc_time from '../Helpers/Time';

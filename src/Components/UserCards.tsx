@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, DropdownButton, Dropdown } from 'react-bootstrap';
-import './UserCards.css';
+import '../Css/UserCards.css';
 import  calc_time  from '../Helpers/Time';
 import Themed from '../Helpers/Themes';
 import { useTheme } from '../Context/MyThemeContext';

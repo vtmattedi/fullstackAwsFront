@@ -1,22 +1,20 @@
+import '../Css/general.css';
+import '../Css/Dashboard.css';
 import React, { useEffect } from 'react';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import MyCard from '../Components/MyCard';
 import Post from '../Components/Posts/Posts';
-import UserCard from '../Components/UserCards';
 import PostModal from '../Components/PostModal';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import '../common.css';
-import Skeleton from 'react-loading-skeleton';
-import "react-loading-skeleton/dist/skeleton.css";
 import PostInfo from '../Types/PostInfo';
 import Themed from '../Helpers/Themes';
-import './Dashboard.css';
 import { Button } from 'react-bootstrap';
 import { useTheme } from '../Context/MyThemeContext';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 import DropdownSearchResults from '../Components/DropdownSearchResults';
 import { Tooltip } from 'react-tooltip';
+import { Commet } from 'react-loading-indicators';
 
 const Dashboard: React.FC = () => {
     const axios = useAxiosJwt();
@@ -124,7 +122,7 @@ const Dashboard: React.FC = () => {
         }
         else {
             updateData();
-            axios.get('/posts').then((response) => {
+            axios.get('/posts?size=100').then((response) => {
                 const { posts } = response.data;
                 if (posts.length === 0) {
                     setPosts([new PostInfo({ title: 'No Posts', content: 'You have not post anything yet.', created_at: '', id: -1 })]);
@@ -156,17 +154,23 @@ const Dashboard: React.FC = () => {
                             <DropdownSearchResults />
                         </div>
                         <div className='d-flex flex-row gap-2'>
-                            
+
                             <Button onClick={() => {
                                 navigator('/globalfeed');
                             }}
-                            data-tooltip-id='global-button-tooltip'
+                                data-tooltip-id='global-button-tooltip'
                                 className={Themed("bt-globalfeed")} variant={theme === "light" ? "primary" : ""}
+                                style={{ fontSize: '1.5em' }}
                             ><div className='bi bi-globe-americas'
                                 style={{ fontSize: '1em' }}></div></Button>
-                            <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}>
-                              {width < 500 ? <div className='bi bi-plus-circle'/>:
-                              <div style={{minWidth:'100px'}}>New Post</div>}
+                            <Button className={Themed("bt-post")} variant={theme === "light" ? "primary" : ""} onClick={() => setNewPost(true)}
+                                style={{
+                                    fontSize: width < 500 ? '1.5em' : '1em',
+                                    height: width < 500 ? '' : '50px',
+
+                                }}>
+                                {width < 500 ? <div className='bi bi-plus-circle' /> :
+                                    <div style={{ minWidth: '100px' }}>New Post</div>}
                             </Button>
                         </div>
                     </div>
@@ -185,9 +189,10 @@ const Dashboard: React.FC = () => {
 
                 </div>
 
-                <div style={{ maxHeight: '70vh', overflowY: 'scroll', overflowX: 'hidden' }} className='gap-1 d-flex flex-column align-content-center'>
+                <div style={{ maxHeight: '70vh', overflowY: 'scroll', overflowX: 'hidden', width: '100%' }} className='gap-1 d-flex flex-column align-content-center'>
                     {
-                        myPosts.length === 0 ? <Skeleton count={1} /> :
+
+                        myPosts.length == 0 ? <div style={{ width: "100%", display: "flex", justifyContent: "center" }}><Commet color={'orange'} /></div> :
                             myPosts.map((post, index) => {
                                 return <Post key={index}
                                     post={post}
@@ -205,7 +210,7 @@ const Dashboard: React.FC = () => {
                     edit={true} />
 
             </div>
-            <Tooltip id={"global-button-tooltip"}>Check what others are thinking</Tooltip>
+            <Tooltip className={"tooltip-custom"} id={"global-button-tooltip"}>Check what others are thinking</Tooltip>
         </div>
     );
 };

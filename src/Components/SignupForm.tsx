@@ -32,6 +32,7 @@ const SignupForm: React.FC = () => {
 
         const parseError = (message: string) => {
             setErrors([]);
+            console.log("Error:", message);
             if (!message) {
                 console.log("No message:", message);
                 return;
@@ -57,7 +58,7 @@ const SignupForm: React.FC = () => {
             setShowLoading(false);
             navigator("/dashboard");
         }).catch((error) => {
-            console.log(error);
+            console.log(error.response.data.message);
             if (!error.response?.data) {
                 setErrors([{ target: 'body', message: 'Server error.' }]);
             }
@@ -163,7 +164,7 @@ const SignupForm: React.FC = () => {
 
                 <button type="submit" className='go-button'>Sign Up</button>
             </form>
-            <Tooltip id={"signup-email-tooltip"}>You can use a mock email here!</Tooltip>
+            <Tooltip className={"tooltip-custom"} id={"signup-email-tooltip"}>You can use a mock email here!</Tooltip>
         </div>
     );
 };

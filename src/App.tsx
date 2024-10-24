@@ -1,20 +1,11 @@
-import React, { useEffect, Children } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import './App.css';
-import SignupForm from './Components/SignupForm';
-import LoginForm from './Components/LoginForm';
+import './Css/general.css';
 import Loading from './Components/Loading';
-import './common.css';
-import { AuthProvider, useAuth } from './Context/AuthContext';
-import Nav from 'react-bootstrap/Nav';
-import { useRefreshToken } from './AxiosIntercept/useAxios';
-import { useNavigate } from 'react-router-dom';
-
-import AboutMe from './Components/AboutMe';
 import { useGlobalContext } from './Context/GlobalLoadingAndAlert';
-import { Alert, Button, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { useTheme } from './Context/MyThemeContext';
 
 interface AppProps {

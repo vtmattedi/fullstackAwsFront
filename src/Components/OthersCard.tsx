@@ -1,14 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import logo from '../noimage.svg';
-import './myCard.css'
-import { useAxiosJwt, useAxios } from '../AxiosIntercept/useAxios';
-import { useAuth } from '../Context/AuthContext';
-import { Dropdown, DropdownButton, Button, Modal } from 'react-bootstrap';
+import logo from '../Assets/noprofile.svg';
+import '../Css/myCard.css'
+import { useAxios } from '../AxiosIntercept/useAxios';
 import { useTheme } from '../Context/MyThemeContext';
-import Themed from '../Helpers/Themes';
-import { useNavigate } from 'react-router-dom';
-import Menu from './menu';
 import GoBackButton from './GoBackButton';
+import { ThreeDot } from 'react-loading-indicators';
 
 interface MyCardProps {
     info?: {
@@ -21,30 +17,20 @@ interface MyCardProps {
 const MyCard: React.FC<MyCardProps> = ({ info }) => {
 
     const [editMode, setEditMode] = React.useState(false);
-    const [currentUser, setCurrentUser] = React.useState("");
-    const [showConfirm, setShowConfirm] = React.useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const axios = useAxiosJwt();
-    const axiosLogout = useAxios();
+    const [currentUser, setCurrentUser] = React.useState<string | undefined>(undefined);
     const { theme, toggleTheme } = useTheme();
     const [width, setWidth] = React.useState<number>(window.innerWidth);
-    const { handleLogout } = useAuth();
-    const navigator = useNavigate();
-
-
 
     const captilize = (str?: string) => {
         if (str)
             return str?.charAt(0)?.toUpperCase() + str.slice(1);
     }
 
-    
     useEffect(() => {
-        setCurrentUser(captilize(info?.user) || "");
+        setCurrentUser(info?.user);
         window.addEventListener('resize', () => {
             setWidth(window.innerWidth);
-        }
-        );
+        });
         return () => {
             window.removeEventListener('resize', () => {
                 setWidth(window.innerWidth);
@@ -64,34 +50,40 @@ const MyCard: React.FC<MyCardProps> = ({ info }) => {
             </div>
 
             <div>
-            <div className='top-mycard-div'>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        width: "100%",
+                <div className='top-mycard-div'>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            width: "100%",
 
+                        }}
+                    >
+                        <div className='img-title-div'>
 
-                    }}
-                >
-                    <div className='img-title-div'>
-
-                        <img src={logo} className='profile-photo' alt='profile' />
-                        <div className='username-div' >
-                            <div className={'username'} style={{ display: editMode ? 'none' : 'block', color: theme === "dark" ? "white" : "black" }}>
-                                {captilize(info?.user || "No user Name")}
+                            <img src={logo} className='profile-photo' alt='profile' />
+                            <div className='username-div' >
+                                <div>
+                                    {
+                                        currentUser ?
+                                            captilize(info?.user) : <ThreeDot color={"orange"} style={{ marginLeft: "1vw" }}></ThreeDot>
+                                    }
+                                </div>
                             </div>
-                            <input ref={inputRef} type='text' value={currentUser} onChange={(e) => setCurrentUser(e.target.value)}
-                                className={Themed('username username-input')} style={{ display: editMode ? 'block' : 'none' }} />
                         </div>
+
                     </div>
 
                 </div>
-
-            </div>
-            <div className='w-100'>
-            <p style={{margin: "auto", textAlign:"center"}} className='email'>{info?.email || "No Email"}</p>
-            </div>
+                <div className='w-100'>
+                    {
+                        <p className='email'
+                            style={{
+                                visibility: currentUser ? "visible" : "hidden",
+                            }}>{info?.email || "no email"}
+                        </p>
+                    }
+                </div>
             </div>
         </div>
 

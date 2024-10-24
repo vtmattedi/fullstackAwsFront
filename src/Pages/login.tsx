@@ -1,8 +1,7 @@
+import '../Css/general.css';
 import React, { useEffect } from 'react';
-import '../App.css';
 import SignupForm from '../Components/SignupForm';
 import LoginForm from '../Components/LoginForm';
-import '../common.css';
 import { useAuth } from '../Context/AuthContext';
 import Nav from 'react-bootstrap/Nav';
 import { useRefreshToken } from '../AxiosIntercept/useAxios';
@@ -42,16 +41,14 @@ function App() {
             <Nav.Link active={menu === 'signup'} onClick={() => setMenu('signup')}>Sign Up</Nav.Link>
           </Nav.Item>
           <Nav.Item >
-            <Nav.Link active={menu === 'about'} onClick={() => setMenu('about')}>About Project</Nav.Link>
+            <Nav.Link active={menu === 'about'} onClick={() => setMenu('about')} className='bi info-circle'>
+              About
+            </Nav.Link>
           </Nav.Item>
         </Nav>
         {menu === 'login' && <LoginForm />}
         {menu === 'signup' && <SignupForm />}
         {menu === 'about' && <AboutMe />}
-        <div>
-
-
-        </div>
       </div>
     </div>
   );

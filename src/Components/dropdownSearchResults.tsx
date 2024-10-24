@@ -3,14 +3,14 @@ import { useTheme } from '../Context/MyThemeContext';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import Themed from '../Helpers/Themes';
 import UserCard from './UserCards';
-import './dropdownSearch.css';
+import '../Css/dropdownSearch.css';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
 const DropdownSearchResults: React.FC = () => {
     const { theme } = useTheme();
     const [showSearchResult, setShowSearchResult] = React.useState<boolean>(false);
-    const [searchResult, setSearchResult] = React.useState<Array<{ user: string, email: string, id: number, created_at: string }>>([]);
+    const [searchResult, setSearchResult] = React.useState<Array<{ username: string, email: string, id: number, created_at: string }>>([]);
     const [searchHandler, setSearchHandler] = React.useState<ReturnType<typeof setTimeout>>();
     const [searchUser, setSearchUser] = React.useState<string>("");
     const axios = useAxiosJwt();
@@ -18,8 +18,7 @@ const DropdownSearchResults: React.FC = () => {
     const navigator = useNavigate();
 
     const searchForUser = (username: string) => {
-        axios.get(`/finduser/${username}`).then((response) => {
-            console.log(response.data);
+        axios.get(`/finduser`,{params:{searchTerm: username}}).then((response) => {
             setSearchResult(response.data?.users);
             setShowSearchResult(true);
         }).catch((error) => {
@@ -65,7 +64,7 @@ const DropdownSearchResults: React.FC = () => {
                     if (searchHandler) {
                         clearTimeout(searchHandler);
                     }
-                    setSearchHandler(setTimeout(() => { searchForUser(e.target.value); console.log("res") }, 100));
+                    setSearchHandler(setTimeout(() => { searchForUser(e.target.value); }, 100));
                 }} value={searchUser}
                 data-tooltip-id='search-bar-tooltip'
                     onMouseEnter={
@@ -115,15 +114,15 @@ const DropdownSearchResults: React.FC = () => {
                                 width: width < 400 ? '100vw' : '80vw',
 
                             }}>{"No results found for: " + searchUser}</div> :
-                            searchResult.map((post, index) => {
-                                return <UserCard key={index} username={post.user} mail={post.email} created_at={post.created_at} onClick={() => { 
+                            searchResult.map((user, index) => {
+                                return <UserCard key={index} username={user.username} mail={user.email} created_at={user.created_at} onClick={() => { 
                                     setSearchUser("");
                                     if (searchHandler) {
                                         clearTimeout(searchHandler);
                                     }
                                     setShowSearchResult(false);
                                     setSearchResult([]);
-                                    navigator("/users/" + post.id);
+                                    navigator("/users/" + user.id);
                                     
                                 }} />
                             })
@@ -131,7 +130,7 @@ const DropdownSearchResults: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <Tooltip id={"search-bar-tooltip"}>Press enter or type at least 3 letters to search</Tooltip>
+            <Tooltip className={"tooltip-custom"} id={"search-bar-tooltip"}>Press enter or type at least 3 letters to search</Tooltip>
         </div>
     );
 };

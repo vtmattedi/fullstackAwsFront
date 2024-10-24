@@ -50,3 +50,10 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
+
+.tooltip-custom
+{
+    max-width: 80vw;
+    text-align: center;
+    border-radius: 20px !important;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './forms.css';
+import '../Css/forms.css';
 import { ErrorProps } from './Interfaces/ErrorMessage';
-import Logo from '../logo2.svg';
+import Logo from '../Assets/logo2.svg';
 import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -118,8 +118,10 @@ const LoginForm: React.FC = () => {
                 </div>
                 <button type="submit" className='go-button'>Login</button>
             </form>
-            <Tooltip id='login-email-tooltip' place='top'>Try out using test@test.com or create an account on the sign up page</Tooltip>
-            <Tooltip id='login-password-tooltip' place='top' >Enter your password or test1234 for the test account</Tooltip>
+            <Tooltip id='login-email-tooltip' place='top'
+               className='tooltip-custom'
+            >Try out using test@test.com or create an account on the sign up page.</Tooltip>
+            <Tooltip className='tooltip-custom' id='login-password-tooltip' place='top' >Enter your password or test1234 for the test account.</Tooltip>
         </div>
         
     );
