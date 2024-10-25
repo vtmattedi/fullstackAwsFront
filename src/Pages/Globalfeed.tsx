@@ -3,7 +3,7 @@ import { useTheme } from '../Context/MyThemeContext';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import PostInfo from '../Types/PostInfo';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
-import Post from '../Components/Posts/Posts';
+import Post from '../Components/Posts';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import { Commet } from 'react-loading-indicators';

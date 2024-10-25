@@ -95,7 +95,7 @@ const MyCard: React.FC<MyCardProps> = ({ info, setInfo }) => {
             console.log(error);
         }).finally(() => {
             setShowConfirm(false);
-            navigator('/login');
+            navigator('/');
         });
 
     }

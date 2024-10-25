@@ -1,6 +1,6 @@
+import '../Css/loading.css';
 import React, { useEffect } from 'react';
 import { FourSquare } from 'react-loading-indicators';
-import './loading.css';
 import Logo from '../Assets/logo2.svg';
 interface LoadingProps {
     text?: String;

@@ -3,7 +3,7 @@ import '../Css/Dashboard.css';
 import React, { useEffect } from 'react';
 import { useAxiosJwt } from '../AxiosIntercept/useAxios';
 import MyCard from '../Components/MyCard';
-import Post from '../Components/Posts/Posts';
+import Post from '../Components/Posts';
 import PostModal from '../Components/PostModal';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';

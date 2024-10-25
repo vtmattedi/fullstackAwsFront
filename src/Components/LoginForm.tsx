@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../Css/forms.css';
-import { ErrorProps } from './Interfaces/ErrorMessage';
+import { ErrorProps } from '../Types/ErrorMessage';
 import Logo from '../Assets/logo2.svg';
 import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';

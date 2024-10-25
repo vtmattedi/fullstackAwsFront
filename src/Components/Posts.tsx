@@ -1,9 +1,9 @@
+import "../Css/Posts.css";
 import React, { useEffect } from 'react';
-import "./Posts.css";
-import PostInfo from '../../Types/PostInfo';
+import PostInfo from '../Types/PostInfo';
 import { Card } from 'react-bootstrap';
-import { useTheme } from '../../Context/MyThemeContext';
-import calc_time from '../../Helpers/Time';
+import { useTheme } from '../Context/MyThemeContext';
+import calc_time from '../Helpers/Time';
 
 interface PostProps {
     post: PostInfo;

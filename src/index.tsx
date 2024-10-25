@@ -13,7 +13,7 @@ import { GlobalProvider } from './Context/GlobalLoadingAndAlert';
 import  LandingPage  from './Pages/LandingPage';
 import Others from './Pages/Others';
 import Globalfeed from './Pages/Globalfeed';
-import Test from './Pages/Test';
+
 
 const router = createBrowserRouter([
   {
@@ -45,10 +45,6 @@ const router = createBrowserRouter([
     path: "/404",
     element: <NotFound />,
   },
-  {
-    path: "/test",
-    element: <Test />,
-  }
 
 ]);
 

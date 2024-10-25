@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ErrorProps } from './Interfaces/ErrorMessage';
+import { ErrorProps } from '../Types/ErrorMessage';
 import { useAxios } from '../AxiosIntercept/useAxios';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
