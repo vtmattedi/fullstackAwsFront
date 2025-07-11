@@ -116,14 +116,33 @@ const LoginForm: React.FC = () => {
                     </div>
                     {errors?.filter((error) => error.target === 'password').map((error, index) => <p key={index} className='error-text'>{error.message}</p>)}
                 </div>
-                <button type="submit" className='go-button'>Login</button>
-            </form>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: '0.5em',
+                        gap: '0.5em',
+                    }}
+                >
+                    <button type="button" className='go-button test-button' onClick={() => {
+                        setEmail('test@test.com');
+                        setPassword('test1234');
+                    }}
+                        data-tooltip-id='button-test-tooltip'
+                    >Test User</button>
+                    <button type="submit" className='go-button'>Login</button>
+                </div>
+            </form >
             <Tooltip id='login-email-tooltip' place='top'
-               className='tooltip-custom'
+                className='tooltip-custom'
             >Try out using test@test.com or create an account on the sign up page.</Tooltip>
             <Tooltip className='tooltip-custom' id='login-password-tooltip' place='top' >Enter your password or test1234 for the test account.</Tooltip>
-        </div>
-        
+            <Tooltip id='button-test-tooltip' place='top'
+                className='tooltip-custom'
+                delayShow={250}
+            >Fill with user test@test.com</Tooltip>
+        </div >
+
     );
 };
 

@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './Css/general.css';
+
+
 import Loading from './Components/Loading';
 import { useGlobalContext } from './Context/GlobalLoadingAndAlert';
 import { Button, Modal } from 'react-bootstrap';

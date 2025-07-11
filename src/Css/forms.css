@@ -89,13 +89,18 @@
    
 
 }
-input
-{
+.test-button{
+    background-color: #008CBA;
+    border: none;
+    color: white;
     text-align: center;
-    font-size: 0.7em;
     font-family: 'Inter', sans-serif;
 }
 
+.test-button:hover{
+    background-color: #007B9A;
+    color: #f1f1f1;
+}
 label
 {
     min-width: 10vw;
