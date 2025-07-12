@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../Context/GlobalLoadingAndAlert';
 import { time } from 'console';
 import { Tooltip } from 'react-tooltip';
+import { Button } from 'react-bootstrap';
 
 
 const LoginForm: React.FC = () => {
@@ -124,13 +125,26 @@ const LoginForm: React.FC = () => {
                         gap: '0.5em',
                     }}
                 >
-                    <button type="button" className='go-button test-button' onClick={() => {
+                    <Button type="button" onClick={() => {
                         setEmail('test@test.com');
                         setPassword('test1234');
+
                     }}
                         data-tooltip-id='button-test-tooltip'
-                    >Test User</button>
-                    <button type="submit" className='go-button'>Login</button>
+                        style={{
+                            fontSize: '1.25rem',
+                            fontFamily: 'Inter, sans-serif',
+                        }}
+                        variant="outline-warning"
+                    >Test User</Button>
+                    <Button
+                        type="submit"
+                        style={{
+                            fontSize: '1.25rem',
+                            fontFamily: 'Inter, sans-serif',
+                        }}
+                        variant="outline-success"
+                    >Login</Button>
                 </div>
             </form >
             <Tooltip id='login-email-tooltip' place='top'
